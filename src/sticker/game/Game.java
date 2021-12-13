@@ -1,17 +1,14 @@
 package sticker.game;
 
-import graphics.TextureAtlas;
+import sticker.graphics.*;
 import sticker.IO.Input;
 import sticker.display.Display;
-import sticker.main.Main;
 import sticker.utils.Time;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
 public class Game implements Runnable {
-
-    //int width, int height, String title, int _clearColor, int numBuffers
 
     public static final int WIDTH = 800;
     public static final int HEIGHT = 600;
@@ -30,14 +27,9 @@ public class Game implements Runnable {
     private Graphics2D graphics;
     private Input input;
     private TextureAtlas atlas;
-
-    //temp
-    float x = 350;
-    float y = 250;
-    float delta = 0;
-    float radius = 50;
-    float speed = 3;
-    //temp end
+    private SpriteSheet sheet;
+    private Sprite sprite;
+    private Player player;
 
 
     public Game() {
@@ -47,6 +39,9 @@ public class Game implements Runnable {
         input = new Input();
         Display.addInputListener(input);
         atlas = new TextureAtlas(ATLAS_FILE_NAME);
+        sheet = new SpriteSheet(atlas.cut(4 * 16, 2 * 16, 16 * 2, 16 * 1), 2, 16);
+        sprite = new Sprite(sheet, 1);
+        player = new Player(300, 300, 2, 3, atlas);
     }
 
     public synchronized void start() {
@@ -71,20 +66,14 @@ public class Game implements Runnable {
     }
 
     private void update() {
-        if (input.getKey(KeyEvent.VK_UP)) y -= speed;
-        if (input.getKey(KeyEvent.VK_DOWN)) y += speed;
-        if (input.getKey(KeyEvent.VK_LEFT)) x -= speed;
-        if (input.getKey(KeyEvent.VK_RIGHT)) x += speed;
+        player.update(input);
     }
 
     private void render() {
         Display.clear();
-        graphics.setColor(Color.white);
 
-        graphics.drawImage(atlas.cut(0, 0, 32, 32), 300, 300, null);
+        player.render(graphics);
 
-//        graphics.fillOval((int) (x + (Math.sin(delta) * 200)),
-//                (int) y, (int) radius * 2, (int) radius * 2);
         Display.swapBuffers();
     }
 

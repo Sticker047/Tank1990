@@ -1,4 +1,4 @@
-package graphics;
+package sticker.graphics;
 
 import sticker.utils.ResourceLoader;
 
