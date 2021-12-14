@@ -1,5 +1,6 @@
 package sticker.game;
 
+import sticker.game.level.Level;
 import sticker.graphics.*;
 import sticker.IO.Input;
 import sticker.display.Display;
@@ -30,6 +31,7 @@ public class Game implements Runnable {
     private SpriteSheet sheet;
     private Sprite sprite;
     private Player player;
+    private Level lvl;
 
 
     public Game() {
@@ -42,6 +44,8 @@ public class Game implements Runnable {
         sheet = new SpriteSheet(atlas.cut(4 * 16, 2 * 16, 16 * 2, 16 * 1), 2, 16);
         sprite = new Sprite(sheet, 1);
         player = new Player(300, 300, 2, 3, atlas);
+        lvl = new Level(atlas);
+
     }
 
     public synchronized void start() {
@@ -67,12 +71,15 @@ public class Game implements Runnable {
 
     private void update() {
         player.update(input);
+        lvl.update();
     }
 
     private void render() {
         Display.clear();
 
+        lvl.render(graphics);
         player.render(graphics);
+        lvl.renderGrass(graphics);
 
         Display.swapBuffers();
     }
